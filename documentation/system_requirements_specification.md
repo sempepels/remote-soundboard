@@ -1,5 +1,5 @@
 # System Requirements Specification
- 
+
 ## Content
 This SRS follows the template defined by the IEEE standard [[1]](#ref-1). Accordingly, it contains the following chapters:
 1. Introduction and Purpose
@@ -58,7 +58,7 @@ Chapters 12 and 13 describe constraints imposed on the design and implementation
 - **BR2:** The Remote Soundboard system must enable the DJ to play previously downloaded sound effects and custom recorded sound effects.
 - **BR3:** The Remote Soundboard system must enable the DJ to quickly retrieve sound effects from the internet based on spontaneous requests from group members during a parade.
 - **BR4:** The Remote Soundboard system must play sound effects through the audio system with a latency of at most 1000 milliseconds after the DJ triggers the sound effect.
-- **BR5:** The costs for the AI services in the Remote Soundboard system must be at most €50 per year.
+- **BR5:** The cost of a single agentic sound retrieval search in the Remote Soundboard system must be at most €0.50.
 
 ### 2.2 WAVE Entertainment
 - **BR6:** The Remote Soundboard system must not require technical expertise to operate.
@@ -70,7 +70,7 @@ Chapters 12 and 13 describe constraints imposed on the design and implementation
 ### 2.3 Developper
 - **BR11:** The Remote Soundboard system will use European developed and hosted AI services whenever possible.
 - **BR12:** The Remote Soundboard system will be developed for an open audience, but will be primarily designed for the specific use case of CV de Trikvögel and WAVE Entertainment.
-- **BR13:** The operational costs of the Remote Soundboard system must be at most €100 per year, which includes any costs for maintaining the domain, hosting a website and cloud services.
+- **BR13:** The operational costs of the Remote Soundboard system must be at most €0.5000 per year, which includes any costs for maintaining the domain, hosting a website and cloud services.
 
 ## 3. Roles
 ### 3.1 Members of CV de Trikvögel
@@ -223,8 +223,8 @@ Before the start of a carnival parade, the DJ wants to prepare the sound effects
 - **PR1:** The soundboard audio host shall begin playing a sound effect within 1000 milliseconds of the DJ triggering it on the soundboard remote controller, measured from the moment the DJ's interaction is registered to the moment audio output begins, in accordance with BR4.
 - **PR2:** The soundboard remote controller shall acknowledge a play or stop action to the DJ within 200 milliseconds of the interaction being registered.
 - **PR3:** The agentic sound retrieval workflow shall provide a status update to the DJ within 5 seconds of the DJ submitting a retrieval request, confirming that the request has been received and is being processed.
-- **PR4:** The annual cost of AI API calls made by the agentic sound retrieval workflow shall not exceed €50, in accordance with BR5.
-- **PR5:** The total annual operational cost of the Remote Soundboard system, including any domain, hosting, and cloud service costs, shall not exceed €100, in accordance with BR13.
+- **PR4:** The cost of a single agentic sound retrieval request, including all AI API calls made during that workflow, shall not exceed €0.50, in accordance with BR5.
+- **PR5:** The total annual operational cost of the Remote Soundboard system, including any domain, hosting, and cloud service costs, shall not exceed €0.5000, in accordance with BR13.
 
 ## 11. Security Requirements
 - **SR1:** The soundboard audio host shall only accept and execute commands from a soundboard remote controller that has been authenticated using a shared secret or equivalent mechanism.
