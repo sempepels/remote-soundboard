@@ -32,7 +32,7 @@ No existing application fully addresses this need. Three candidate solutions —
  
 - **Limited remote control.** Some solutions do not allow the DJ to truly control sound effects from his smartphone while the sounds play on the laptop connected to the audio system.
 - **Inconsistent cross-platform support.** The laptop, connected to the audio system, may be either a Windows machine or an Apple MacBook, and the smartphone may be either an Android device or an iPhone. Some of the analyzed solutions do not support all combinations of these platforms.
-- **No on-demand sound retrieval.** None of the solutions allow the DJ to directly search the internet from his smartphone remote to retrieve sound effects that are spontaneously requested by group members during a parade. The analyzed solutions only support sound effects that are first uploaded to the system, or support collections of general common sound effects. Sound effects in the Limburgs dialects are of course not included in these collections.
+- **No on-demand sound retrieval.** None of the solutions allow the DJ to directly obtain new sound effects from his smartphone remote that are spontaneously requested by group members during a parade. The analyzed solutions only support sound effects that are first uploaded to the system, or support collections of general common sound effects. Sound effects such as phrases in the Limburgs dialect are of course not included in these collections, and none of the solutions allow the DJ to extract such a specific phrase from a longer audio fragment.
 - **Cost and uncertainty.** The treasurer of the carnival group was reluctant to allocate part of the group's tight budget to paid licences when the suitability of these solutions for this specific use case had not been proven.
 
 ### 1.3 Proposed Solution
@@ -41,7 +41,7 @@ To address the stated problem, this project will deliver a custom Remote Soundbo
 - A **soundboard remote controller** running on the DJ's smartphone or on a Windows or macOS desktop computer, used to trigger and manage sound effects. Running the controller on a desktop or laptop provides a more convenient interface for uploading and organising sound effect files before a parade.
 - A **soundboard audio host** running on the laptop connected to the audio system, which receives commands from the remote controller and plays the corresponding sound effects through the speakers.
 
-The remote controller allows the DJ to directly play and control sound effects on the audio host, while walking behind the carnival wagon. The remote controller additionally supports retrieving and downloading new sound effects to the remote controller directly from the internet. This retrieval feature is implemented using agentic Artificial Intelligence (AI) workflows, which have recently demonstrated the ability to query and process data from the internet effectively [[7]](#ref-7). Because Spotify is used as the music player on the laptop, the system also integrates with Spotify to further control the audio system. The audio system should for example automatically lower the music volume while a sound effect is playing.
+The remote controller allows the DJ to directly play and control sound effects on the audio host, while walking behind the carnival wagon. The remote controller additionally supports retrieving new sound effects from online audio libraries and extracting specific sound effects from audio files. Specific parts of the audio processing pipeline are implemented using agentic Artificial Intelligence (AI) workflows, which have recently demonstrated the ability to effectively process audio data [[7]](#ref-7) [[8]](#ref-8). Because Spotify is used as the music player on the laptop, the system also integrates with Spotify to further control the audio system. The audio system should for example automatically lower the music volume while a sound effect is playing.
 
 ### 1.4 Document overview
 The remainder of this document is structured as follows. Chapter 2 establishes the business requirements, describing the high-level goals and constraints that the Remote Soundboard system must satisfy from the perspective of CV de Trikvögel, WAVE Entertainment and the developer for this system. Chapter 3 defines the roles of all stakeholders involved, such as the DJ and the carnival group members, whose needs drive the requirements in subsequent chapters.
@@ -56,9 +56,9 @@ Chapters 12 and 13 describe constraints imposed on the design and implementation
 ### 2.1 CV de Trikvögel
 - **BR1:** The Remote Soundboard system must enable the DJ to play sound effects on the audio system during carnival parades at any moment.
 - **BR2:** The Remote Soundboard system must enable the DJ to play previously downloaded sound effects and custom recorded sound effects.
-- **BR3:** The Remote Soundboard system must enable the DJ to quickly retrieve sound effects from the internet based on spontaneous requests from group members during a parade.
+- **BR3:** The Remote Soundboard system must enable the DJ to quickly obtain new sound effects based on spontaneous requests from group members during a parade, both by retrieving them from online sound libraries and by extracting specific quotes or sound effects from longer audio files.
 - **BR4:** The Remote Soundboard system must play sound effects through the audio system with a latency of at most 1000 milliseconds after the DJ triggers the sound effect.
-- **BR5:** The cost of a single agentic sound retrieval search in the Remote Soundboard system must be at most €0.50.
+- **BR5:** The cost of a single agentic sound extraction request in the Remote Soundboard system must be at most €0.50.
 
 ### 2.2 WAVE Entertainment
 - **BR6:** The Remote Soundboard system must not require technical expertise to operate.
@@ -87,7 +87,8 @@ The DJ from WAVE Entertainment is also a member of CV de Trikvögel and therefor
 The Remote Soundboard system should include the following most important high-level features:
 - **Remote Soundboard Control:** The DJ can trigger and manage sound effects on the audio system from his smartphone while walking behind the carnival wagon during parades, or from a desktop computer/laptop before the parade.
 - **Upload Sound Effects:** The DJ can upload sound effects to the soundboard remote controller.
-- **Agentic Sound Retrieval:** The DJ can use natural language to request specific sound effects from an agentic AI workflow. This agentic workflow will then retrieve the requested sound effect from the internet and download it to the soundboard remote controller.
+- **Sound Effect Retrieval:** The DJ can search online royalty-free sound libraries from the soundboard remote controller and download matching sound effects directly to the controller.
+- **Agentic Sound Extraction:** The DJ can supply a longer audio file and describe a specific quote or sound effect in natural language. A multi-agent AI workflow then extracts the requested fragment from the audio file and adds it to the soundboard remote controller.
 - **Cross-Platform Compatibility:** The soundboard remote controller is compatible with both Android and iOS smartphones, and with Windows and macOS desktop computers and laptops. The soundboard audio host is compatible with both Windows and macOS.
 - **Spotify Integration:** The Remote Soundboard system integrates with Spotify to control the music playback on the audio system, for example by automatically lowering the music volume while a sound effect is playing.
 
@@ -96,9 +97,12 @@ The Remote Soundboard system should include the following most important high-le
 The main use case for the Remote Soundboard system comes from the building group of CV de Trikvögel. As this building group is responsible for designing and building the carnival wagon, they also come up with ideas for sound effects that would fit the theme of the wagon and enhance the atmosphere during the parades. For example, the 2025 theme was based on Shaun the Sheep. For this specific theme the wagon’s audio system could play a short sheep sound effect at specific moments during the parade. Some members of the building group could then record or download the desired sound effects before the start of the parades. With the Remote Soundboard system, the DJ can then play these sound effects on the audio system at specific moments during the parades. This can be at places where a jury is positioned or at places where parts of the parades are recorded for television. In this way, the theme of the wagon can be more interactively expressed trough the wagon.
 
 ### 5.2 Playing spontaneously requested sound effects during a parade
-While the majority of the members of CV de Trikvögel are not part of the building group, they do participate in the parades by walking behind the wagon and create the festive atmosphere. During the parades, these members are often very enthusiastic and want to participate in expressing the yearly theme of the wagon. They already often request specific songs that further enhance the atmosphere. With the Remote Soundboard system, these members can also spontaneously request specific sound effects for desired moments during the parades. As the DJ also walks behind the wagon during the parades, it is difficult for him to download the requested sound effects from the internet on his smartphone while walking and managing the music. The Remote Soundboard system therefore offloads this task to an agentic AI workflow. The DJ can simply describe the requested sound effect in natural language while the agentic AI workflow will then retrieve the requested sound effect from the internet and download it to the soundboard remote controller. The DJ can then play the requested sound effect on the audio system at the desired moment during the parade.
+While the majority of the members of CV de Trikvögel are not part of the building group, they do participate in the parades by walking behind the wagon and create the festive atmosphere. During the parades, these members are often very enthusiastic and want to participate in expressing the yearly theme of the wagon. They already often request specific songs that further enhance the atmosphere. With the Remote Soundboard system, these members can also spontaneously request specific sound effects for desired moments during the parades. As the DJ also walks behind the wagon while managing the music, the Remote Soundboard system lets him quickly search online royalty-free sound libraries directly from the remote controller, preview a matching result, and download it to the controller in just a few interactions. The DJ can then play the requested sound effect on the audio system at the desired moment during the parade.
  
-### 5.3 Managing sound effects from a desktop computer/laptop before a parade
+### 5.3 Extracting a specific quote or sound effect from a longer audio file
+As members of CV de Trikvögel can have very specific requests for sound effects, some of these may not be available as short sound snippets from the online sound libraries. A typical example of this would be a specific phrase in the Limburgs dialect, which is traditionally associated with Limburgs carnival, or a particular quote from a locally popular singer. Such fragments only exist inside a longer audio recording. The Remote Soundboard system therefore offers an agentic sound extraction feature. The DJ supplies a longer audio file and describes the specific quote or sound effect he wants to extract from it in natural language. A multi-agent AI workflow then locates the described fragment within the recording and extracts it as a short sound effect. Once the workflow has finished, the DJ can preview the extracted fragment and either add it to the soundboard or discard it.
+
+### 5.4 Managing sound effects from a desktop computer/laptop before a parade
 Before the start of a carnival parade, the DJ wants to prepare the sound effects that are requested by the building group or sound effects that he wants to play during the parade. This preparation process is easier to do on a desktop computer or laptop than on a smartphone. Firstly, a desktop computer or laptop have a more accessible file system and provide more options for downloading the desired sound effects from the internet. Secondly, the larger screen and the more precise control on a desktop computer or laptop also make it easier to organise and manage the saved sound effects on the controller. The controller then allows the DJ to create easily recognisable names for the sound effects and color code them so he can always quickly find the desired sound effect during the parade. Once the parade begins, the DJ switches to the smartphone-based remote controller to trigger sound effects while walking behind the wagon.
 
 ## 6. User Requirements
@@ -118,12 +122,12 @@ Before the start of a carnival parade, the DJ wants to prepare the sound effects
 - **UR11:** The DJ must be able to assign a color to each sound effect button on the soundboard remote controller.
 - **UR12:** The DJ must be able to assign a color to a sound effect group, which serves as the default color for all buttons in that group that do not have an individually assigned color.
 
-### 6.3 Agentic Sound Retrieval
-- **UR13:** The DJ must be able to describe a desired sound effect in natural language from the soundboard remote controller.
-- **UR14:** The system must automatically search the internet and retrieve a sound effect matching the DJ's description without requiring any further manual action from the DJ.
-- **UR15:** The DJ must be notified when the retrieved sound effect is ready for use.
-- **UR16:** The DJ must be able to preview a retrieved sound effect before adding it to the soundboard.
-- **UR17:** The DJ must be able to accept or discard a retrieved sound effect.
+### 6.3 Sound Effect Retrieval and Extraction
+- **UR13:** The DJ must be able to search online royalty-free sound libraries from the soundboard remote controller and view the matching results.
+- **UR14:** The DJ must be able to preview a sound effect found in the libraries and download it to the soundboard.
+- **UR15:** The DJ must be able to supply a longer audio file and describe, in natural language, a specific quote or sound effect to extract from it.
+- **UR16:** The system must automatically extract the described fragment from the supplied audio file using a multi-agent AI workflow, and must notify the DJ when the extracted sound effect is ready for use.
+- **UR17:** The DJ must be able to preview the extracted sound effect and either accept it, which adds it to the soundboard, or discard it.
 
 ### 6.4 Spotify Integration
 - **UR18:** The music volume must automatically decrease when a sound effect starts playing and return to its original level when the sound effect finishes.
@@ -134,7 +138,7 @@ Before the start of a carnival parade, the DJ wants to prepare the sound effects
 - **UR21:** The DJ must be able to connect the soundboard remote controller to the soundboard audio host without requiring technical expertise.
 - **UR22:** The DJ must be able to see whether the soundboard remote controller is connected to the soundboard audio host.
 - **UR23:** The DJ must be able to sign in to the soundboard remote controller using their Google account.
-- **UR24:** The DJ must be able to enter and save their personal API key for the AI service in the soundboard remote controller settings.
+- **UR24:** The DJ must be able to enter and save their personal API key for the AI service used by the agentic sound extraction feature in the soundboard remote controller settings.
 
 ## 7. Functional Requirements
 ### 7.1 Sound Effect Playback
@@ -155,15 +159,15 @@ Before the start of a carnival parade, the DJ wants to prepare the sound effects
 - **FR13:** The soundboard remote controller shall synchronise all sound effect files and metadata to the soundboard audio host after any addition, modification, or deletion.
 - **FR14:** The soundboard remote controller shall persist all sound effects and their associated metadata between application sessions.
 
-### 7.3 Agentic Sound Retrieval
-- **FR15:** The soundboard remote controller shall provide a natural language input interface through which the DJ can describe a desired sound effect.
-- **FR16:** Upon submission of a natural language description, the system shall invoke a multi-agent AI workflow to search the internet for a matching sound effect.
-- **FR17:** The agentic AI workflow shall download the retrieved sound effect to the soundboard remote controller.
-- **FR18:** The soundboard remote controller shall notify the DJ when the agentic AI workflow has completed retrieval of a sound effect.
-- **FR19:** The soundboard remote controller shall allow the DJ to preview a retrieved sound effect before adding it to the soundboard.
-- **FR20:** The soundboard remote controller shall allow the DJ to accept a retrieved sound effect, which shall then add it to the soundboard, or to discard it.
-- **FR21:** The agentic AI workflow shall use European-developed and hosted AI services wherever technically feasible, in accordance with BR11.
-- **FR22:** The soundboard remote controller shall provide a settings interface through which the DJ can enter and save their personal API key for the AI service used by the agentic sound retrieval feature.
+### 7.3 Sound Effect Retrieval and Extraction
+- **FR15:** The soundboard remote controller shall allow the DJ to search one or more online royalty-free sound libraries using a text query and shall display the matching results.
+- **FR16:** The soundboard remote controller shall allow the DJ to preview a search result and download it from the library, adding it to the soundboard.
+- **FR17:** The soundboard remote controller shall provide a natural language input interface through which the DJ can supply a longer audio file and describe a specific quote or sound effect to extract from it.
+- **FR18:** Upon submission, the system shall invoke a multi-agent AI workflow that locates and extracts the described fragment from the supplied audio file.
+- **FR19:** The soundboard remote controller shall notify the DJ when the multi-agent AI workflow has completed extraction and shall allow the DJ to preview the extracted sound effect before adding it to the soundboard.
+- **FR20:** The soundboard remote controller shall allow the DJ to accept the extracted sound effect, which shall then add it to the soundboard, or to discard it.
+- **FR21:** The multi-agent AI workflow shall use European-developed and hosted AI services wherever technically feasible, in accordance with BR11.
+- **FR22:** The soundboard remote controller shall provide a settings interface through which the DJ can enter and save their personal API key for the AI service used by the agentic sound extraction feature.
 
 ### 7.4 Spotify Integration
 - **FR23:** The soundboard audio host shall interface with the Spotify application running on the same laptop to control its playback volume.
@@ -205,7 +209,7 @@ Before the start of a carnival parade, the DJ wants to prepare the sound effects
 ## 9. Interface Requirements
 ### 9.1 User Interface
 - **IR1:** The soundboard remote controller shall present a main screen with a grid-based layout of labelled, color-coded buttons, each representing one sound effect.
-- **IR2:** The soundboard remote controller shall provide a dedicated interface for the agentic sound retrieval feature, clearly separated from the main soundboard.
+- **IR2:** The soundboard remote controller shall provide dedicated interfaces for the sound effect retrieval and agentic sound extraction features, clearly separated from the main soundboard.
 - **IR3:** The soundboard remote controller shall provide a settings screen for configuring the connection to the soundboard audio host, the Spotify integration, and other preferences.
 - **IR4:** The soundboard audio host shall display the current connection status and the name of any sound effect currently playing.
 
@@ -215,15 +219,16 @@ Before the start of a carnival parade, the DJ wants to prepare the sound effects
 - **IR7:** The soundboard remote controller shall use the device's microphone hardware to support the custom sound effect recording feature described in FR10.
 
 ### 9.3 Software Interface
-- **IR8:** The soundboard audio host shall interface with the Spotify desktop application using the Spotify Web API [[8]](#ref-8) to read and set playback volume.
+- **IR8:** The soundboard audio host shall interface with the Spotify desktop application using the Spotify Web API [[9]](#ref-9) to read and set playback volume.
 - **IR9:** The soundboard remote controller and soundboard audio host shall communicate using a documented application-level protocol over HTTP or WebSocket.
-- **IR10:** The agentic sound retrieval feature shall interface with a third-party AI service API that supports internet search and audio file retrieval capabilities.
+- **IR10:** The sound effect retrieval feature shall interface with one or more online royalty-free sound library APIs that support searching for and downloading sound effects.
+- **IR11:** The agentic sound extraction feature shall interface with a third-party AI service API that supports the language and audio processing required to locate and extract a fragment from a longer audio file.
 
 ## 10. Performance Requirements
 - **PR1:** The soundboard audio host shall begin playing a sound effect within 1000 milliseconds of the DJ triggering it on the soundboard remote controller, measured from the moment the DJ's interaction is registered to the moment audio output begins, in accordance with BR4.
 - **PR2:** The soundboard remote controller shall acknowledge a play or stop action to the DJ within 200 milliseconds of the interaction being registered.
-- **PR3:** The agentic sound retrieval workflow shall provide a status update to the DJ within 5 seconds of the DJ submitting a retrieval request, confirming that the request has been received and is being processed.
-- **PR4:** The cost of a single agentic sound retrieval request, including all AI API calls made during that workflow, shall not exceed €0.50, in accordance with BR5.
+- **PR3:** The agentic sound extraction workflow shall provide a status update to the DJ within 5 seconds of the DJ submitting an extraction request, confirming that the request has been received and is being processed.
+- **PR4:** The cost of a single agentic sound extraction request, including all AI API calls made during that workflow, shall not exceed €0.50, in accordance with BR5.
 - **PR5:** The total annual operational cost of the Remote Soundboard system, including any domain, hosting, and cloud service costs, shall not exceed €0.5000, in accordance with BR13.
 
 ## 11. Security Requirements
@@ -240,28 +245,29 @@ Before the start of a carnival parade, the DJ wants to prepare the sound effects
 - **DC6:** The soundboard audio host must produce audio output through the operating system's default audio device without requiring any modifications to the existing audio hardware setup on the carnival wagon.
 - **DC7:** The system must not depend on paid third-party services beyond the Spotify Premium subscription already in use and the budgeted AI service costs, in accordance with BR5 and BR13.
 - **DC8:** User authentication in the soundboard remote controller must be implemented using Google Sign-In (Google OAuth 2.0), in accordance with SR3.
-- **DC9:** The agentic sound retrieval feature must not include a built-in or shared API key for the AI service; each user must supply and configure their own API key, in accordance with FR22.
+- **DC9:** The agentic sound extraction feature must not include a built-in or shared API key for the AI service; each user must supply and configure their own API key, in accordance with FR22.
 
 ## 13. External System Requirements
 - **ESR1:** The Spotify desktop application must be installed and running on the laptop connected to the audio system for the Spotify integration features described in FR23 through FR27 to function.
 - **ESR2:** An active Spotify Premium account must be logged in to the Spotify application on the laptop, as the Spotify Web API requires a Premium subscription to control playback volume programmatically.
-- **ESR3:** The device running the soundboard remote controller must have an active cellular data connection or access to a Wi-Fi network with internet connectivity for the agentic sound retrieval feature described in FR16 and FR17 to function.
+- **ESR3:** The device running the soundboard remote controller must have an active cellular data connection or access to a Wi-Fi network with internet connectivity for the sound effect retrieval and agentic sound extraction features described in FR15 through FR20 to function.
 - **ESR4:** The laptop running the soundboard audio host must be accessible over the same network as the device running the soundboard remote controller, either through the device's cellular hotspot or another shared network.
-- **ESR5:** The AI service used for the agentic sound retrieval workflow must provide a publicly accessible API, must support internet search and audio file retrieval, must operate within the cost constraints of BR5, and must be preferably developed and hosted within Europe in accordance with BR11.
-- **ESR6:** The AI service used for the agentic sound retrieval workflow must provide transparent per-request pricing to enable monitoring of costs against the limit defined in BR5.
-- **ESR7:** The DJ must obtain and configure their own API key from the AI service provider before the agentic sound retrieval feature described in FR16 can be used.
+- **ESR5:** The AI service used for the agentic sound extraction workflow must provide a publicly accessible API, must support the language and audio processing required to locate and extract a fragment from a longer audio file, must operate within the cost constraints of BR5, and must be preferably developed and hosted within Europe in accordance with BR11.
+- **ESR6:** The AI service used for the agentic sound extraction workflow must provide transparent per-request pricing to enable monitoring of costs against the limit defined in BR5.
+- **ESR7:** The DJ must obtain and configure their own API key from the AI service provider before the agentic sound extraction feature described in FR17 through FR20 can be used.
+- **ESR8:** The online sound libraries used by the sound effect retrieval feature must provide royalty-free sound effects through a publicly accessible API or interface at no cost, in accordance with BR13 and DC7.
 
 ## 14. Quality Assurance Requirements
 - **QAR1:** The developer shall write and maintain automated unit tests covering the core logic of the soundboard remote controller and the soundboard audio host.
 - **QAR2:** The developer shall perform integration tests verifying that the soundboard remote controller correctly triggers sound playback on the soundboard audio host across a network connection.
-- **QAR3:** The developer shall perform end-to-end tests of the agentic sound retrieval workflow to verify that sound effects can be retrieved from the internet and added to the soundboard.
+- **QAR3:** The developer shall perform end-to-end tests of the sound effect retrieval feature and the agentic sound extraction workflow to verify that sound effects can be retrieved from the online libraries and extracted from longer audio files, and then added to the soundboard.
 - **QAR4:** The soundboard remote controller shall be tested on at least one physical Android device, at least one physical iOS device, at least one Windows machine, and at least one macOS machine to verify the cross-platform compatibility required by DC1.
 - **QAR5:** The soundboard audio host shall be tested on at least one Windows machine and at least one macOS machine to verify the cross-platform compatibility required by DC2.
 - **QAR6:** The developer shall measure and document the end-to-end latency from triggering a sound effect on the soundboard remote controller to the start of audio output on the soundboard audio host under realistic network conditions, and shall verify that this latency does not exceed the limit defined in PR1.
 - **QAR7:** Before the first carnival parade, the developer shall conduct a usability test with the DJ and at least one other member of CV de Trikvögel to verify that the system meets the usability requirements defined in NFR1 through NFR4.
 
 ## 15. Documentation Requirements
-- **DR1:** The developer shall provide a user manual for the DJ describing how to use the soundboard remote controller, covering at minimum: triggering sound effects, managing sound effects, using the agentic sound retrieval feature, and configuring the Spotify integration.
+- **DR1:** The developer shall provide a user manual for the DJ describing how to use the soundboard remote controller, covering at minimum: triggering sound effects, managing sound effects, retrieving sound effects from online libraries, using the agentic sound extraction feature, and configuring the Spotify integration.
 - **DR2:** The developer shall provide an installation and configuration guide for setting up the soundboard audio host on the laptop.
 - **DR3:** The developer shall provide a setup guide for configuring the connection between the soundboard remote controller and the soundboard audio host.
 - **DR4:** All user-facing documentation shall be written in language accessible to non-technical users, in accordance with NFR3.
@@ -286,8 +292,11 @@ Before the start of a carnival parade, the DJ wants to prepare the sound effects
 <a id="ref-6"></a>[6]: Paterson, A. *Podcast Soundboard*.
      from https://podcastsoundboard.com/
  
-<a id="ref-7"></a>[7]: Plaat, A., van Duijn, M., van Stein, N., Preuss, M., van der Putten, P., & Batenburg, K. J. *Agentic Large Language Models, a Survey*. arXiv preprint arXiv:2503.23037, 2025.
-     from https://arxiv.org/abs/2503.23037
+<a id="ref-7"></a>[7]: Yu, D., Song, K., Lu, P., He, T., Tan, X., Ye, W., Zhang, S., & Bian, J. *MusicAgent: An AI Agent for Music Understanding and Generation with Large Language Models*. Proceedings of the 2023 Conference on Empirical Methods in Natural Language Processing: System Demonstrations, 246–255.
+     from https://aclanthology.org/2023.emnlp-demo.21/
  
-<a id="ref-8"></a>[8]: Spotify AB. *Spotify Web API Reference*.
+<a id="ref-8"></a>[8]: Wijngaard, G., Formisano, E., Dumontier, M., & Jitsev, J. *AudioToolAgent: An Agentic Framework for Audio-Language Models*. arXiv.
+     from https://arxiv.org/abs/2510.02995
+ 
+<a id="ref-9"></a>[9]: Spotify AB. *Spotify Web API Reference*.
      from https://developer.spotify.com/documentation/web-api
